@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List App</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="firebaseConfig.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import {
+        createApp,
+        ref,
+      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+      import {
+        getFirestore,
+        getDocs,
+        collection,
+        addDoc,
+        getDoc,
+        deleteDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+      const app = initializeApp(firebaseConfig);
+      var db = getFirestore(app);
+
+      createApp({
+        data() {
+          return {
+            title: "To Do List App",
+            notes: [],
+          };
+        },
+        methods: {
+          async refreshData() {
+            this.notes = [];
+            var querySnaphot = await getDocs(collection(db, "notes"));
+            querySnaphot.forEach((doc) => {
+              this.notes.push({
+                description: doc.data().description,
+                deadline: doc.data().deadline,
+                instruktor: doc.data().instruktor,
+                id: doc.id,
+              });
+            });
+          },
+
+          async addNewNotes() {
+            var newNotes = document.getElementById("newNotes").value;
+            var newDeadline = document.getElementById("newDeadline").value;
+            var insTruktor = document.getElementById("instruktor").value;
+            if (newNotes.trim() === "") {
+              // Validasi jika nilai input kosong
+              alert("Please enter a note.");
+              return;
+            }
+            var promptText = prompt("Masukkan kata kunci:");
+            if (promptText === "saya dani") {
+              await addDoc(collection(db, "notes"), {
+                description: newNotes,
+                deadline: newDeadline,
+                instruktor: insTruktor,
+              });
+              this.refreshData();
+              document.getElementById("newNotes").value = ""; // Mengosongkan nilai input
+            } else {
+              alert("Masukkan kata yang benar.");
+            }
+            document.getElementById("newNotes").value = "";
+            document.getElementById("newDeadline").value = "";
+            document.getElementById("instruktor").value = "";
+          },
+
+          async deleteNotes(id) {
+            var promptText = prompt("Masukkan kata kunci:");
+            if (promptText === "dani1995") {
+              // Menghapus catatan dari koleksi "notes"
+              await deleteDoc(doc(db, "notes", id));
+
+              // Menambahkan data yang dihapus ke koleksi "done"
+              const deletedNoteRef = collection(db, "done");
+              await addDoc(deletedNoteRef, {
+                description: this.notes.find(note => note.id === id).description,
+                deadline: this.notes.find(note => note.id === id).deadline,
+                instruktor: this.notes.find(note => note.id === id).instruktor,
+              });
+
+              this.refreshData();
+            } else {
+              alert("Masukkan kata yang benar.");
+            }
+          }
+        },
+        mounted: function () {
+          this.refreshData();
+        },
+      }).mount("#app");
+    </script>
+
+    <div id="app">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="done.html">Done</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+      </ul>
+      <hr />
+      <div class="container">
+        <h1>{{ title }}</h1>
+        <div class="add">
+          <input placeholder="Tugas" type="text" id="newNotes" />&nbsp;
+          <input placeholder="Deadline" type="text" id="newDeadline" />&nbsp;
+          <input placeholder="Instruktor" type="text" id="instruktor" />&nbsp;
+          <button @click="addNewNotes()">Add Notes</button>
+        </div>
+
+        <table style="width: 50vw">
+          <tr>
+            <th>Tugas</th>
+            <th>Deadline</th>
+            <th>Instruktor</th>
+            <th>Status</th>
+          </tr>
+          <tr v-for="note in notes">
+            <td>{{note.description}}</td>
+            <td>{{note.deadline}}</td>
+            <td>{{note.instruktor}}</td>
+            <td><button @click="deleteNotes(note.id)">Hapus Tugas (selesai)</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

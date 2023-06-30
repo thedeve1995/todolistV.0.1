@@ -1,0 +1,114 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(202, 198, 198);
+}
+
+#app .container{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100vw;
+    min-height: 90vh;
+    justify-content: center;
+    align-items:center;
+}
+
+#app table {
+    border-radius: 20px;
+    background-color: rgba(25, 36, 19, 0.849);
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+#app table tr{
+    height: 40px;
+    
+}
+
+#app table tr th{
+    color: aliceblue;
+}
+
+#app table tr td{
+    background-color: burlywood;
+    text-align: center;
+}
+
+#app table tr td button{
+    padding: 5px 10px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(255, 69, 69);
+    font-weight: 600;
+    color: aliceblue;
+}
+
+#app table tr td button:active{
+    background-color: red;
+}
+
+table, tr, th, td {
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#app .add{
+    width: 50vw;
+    display: flex;
+    background-color: burlywood;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#app .add button{
+    padding: 5px 10px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: rgb(41, 88, 216);
+    font-weight: 600;
+    color: aliceblue;
+}
+
+#app .add button:active{
+    background-color: rgb(10, 72, 241);
+}
+
+#app .add input{
+    flex: 1;
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+}
+
+.nav {
+    display: flex;
+    text-decoration: none;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    
+}
+.nav .nav-item{
+    list-style: none;
+    background-color: white;
+    width: 100px;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 10px;
+}
+.nav .nav-item a{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    
+    
+}
